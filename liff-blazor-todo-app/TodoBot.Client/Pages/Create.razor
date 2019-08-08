@@ -1,0 +1,28 @@
+﻿@page "/create"
+@inject ILiffClient Liff
+@inject IJSRuntime JSRuntime
+@inject HttpClient HttpClient
+
+
+<TodoEditor Todo="new Todo() { DueDate = DateTime.Now}"
+            ButtonName="作成"
+            ButtonClickAsync="CreateTodoAsync"></TodoEditor>
+
+<Alert Message="@ErrorMessage" AlertType="danger"></Alert>
+
+@code{
+    string ErrorMessage;
+    async Task CreateTodoAsync(Todo todo)
+    {
+        ErrorMessage = null;
+        try
+        {
+            todo.UserId = Liff.Data.Context.UserId;
+            await HttpClient.CreateTodoAsync(Liff.AccessToken, todo);
+        }
+        catch (Exception e)
+        {
+            ErrorMessage = e.Message;
+        }
+    }
+}
