@@ -15,7 +15,7 @@ namespace TodoBot.Server
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
-            //Use Cosmos DB
+            //Using Cosmos DB
             //builder.Services.AddTransient<ITodoRepository>(provider => 
             //{
             //    var configuration = provider.GetRequiredService<IConfiguration>();
@@ -24,7 +24,7 @@ namespace TodoBot.Server
             //    return new CosmosDbTodoRepository(accountEndpoint, accountKey);
             //});
 
-            //Use Azure Table Storage
+            //Using Azure Table Storage
             builder.Services.AddTransient<ITodoRepository>(provider => 
             {
                 var configuration = provider.GetRequiredService<IConfiguration>();

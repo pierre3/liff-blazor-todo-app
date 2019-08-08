@@ -9,13 +9,14 @@ namespace TodoBot.Client
 {
     public static class HttpClientExtension
     {
+        public static readonly string baseUrl = "https://mytaskbot.azurewebsites.net";
         public static async Task<IList<Todo>> GetTodoListAsync(this HttpClient httpClient, string accessToken, string userId)
         {
             var response = await SendAsync(
                 httpClient,
                 accessToken,
                 HttpMethod.Get,
-                $"https://mytaskbot.azurewebsites.net/api/{userId}/todoList");
+                $"{baseUrl}/api/{userId}/todoList");
             var body = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<IList<Todo>>(body) ?? new List<Todo>();
         }
@@ -26,7 +27,7 @@ namespace TodoBot.Client
                 httpClient,
                 accessToken,
                 HttpMethod.Get,
-                $"https://mytaskbot.azurewebsites.net/api/{userId}/todoList/{id}");
+                $"{baseUrl}/api/{userId}/todoList/{id}");
             var body = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<Todo>(body);
         }
@@ -39,7 +40,7 @@ namespace TodoBot.Client
                 httpClient,
                 accessToken,
                 HttpMethod.Put,
-                $"https://mytaskbot.azurewebsites.net/api/todoList/{id}",
+                $"{baseUrl}/api/todoList/{id}",
                 content);
         }
 
@@ -51,13 +52,17 @@ namespace TodoBot.Client
                 httpClient,
                 accessToken,
                 HttpMethod.Post,
-                "https://mytaskbot.azurewebsites.net/api/todoList",
+                $"{baseUrl}/api/todoList",
                 content);
         }
 
         public static async Task DeleteTodoAsync(this HttpClient httpClient, string accessToken, string userId, string id)
         {
-            await SendAsync(httpClient, accessToken, HttpMethod.Delete, $"https://mytaskbot.azurewebsites.net/api/{userId}/todoList/{id}");
+            await SendAsync(
+                httpClient, 
+                accessToken, 
+                HttpMethod.Delete, 
+                $"{baseUrl}/api/{userId}/todoList/{id}");
         }
 
 
