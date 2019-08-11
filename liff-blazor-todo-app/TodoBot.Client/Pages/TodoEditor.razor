@@ -3,7 +3,8 @@
 @inject HttpClient httpClient
 @inject IUriHelper UriHelper
 
-<div style="max-width:24rem;">
+<EditForm style="max-width:24rem;" Model="Todo" OnValidSubmit="OnButtonClickAsync">
+    <DataAnnotationsValidator />
     <div class="form-group">
         <label for="title">タイトル</label>
         <input type="text" name="title" class="form-control" @bind="Todo.Title" />
@@ -25,9 +26,12 @@
         <label for="dueDate">期日</label>
         <input type="date" class="form-control" name="dueDate" @bind="Todo.DueDate" @bind:format="yyyy-MM-dd" />
     </div>
-    <button class="form-control btn btn-primary" @onclick="OnButtonClickAsync">@ButtonName</button>
-</div>
-<Alert Message="@ErrorMessage" AlertType="danger"></Alert>    
+    <div class="text-danger">
+        <ValidationSummary></ValidationSummary>
+    </div>
+    <button class="form-control btn btn-primary">@ButtonName</button>
+</EditForm>
+<Alert Message="@ErrorMessage" AlertType="danger"></Alert>
 
 @code{
     [Parameter]
@@ -37,7 +41,7 @@
     string ButtonName { get; set; }
 
     [Parameter]
-    Func<Todo,Task> ButtonClickAsync { get; set; }
+    Func<Todo, Task> ButtonClickAsync { get; set; }
 
     string ErrorMessage;
 

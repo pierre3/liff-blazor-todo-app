@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace TodoBot.Shared
 { 
@@ -12,6 +13,7 @@ namespace TodoBot.Shared
 
         public string UserId { get; set; }
 
+        [Required(ErrorMessage ="タイトルを入力してください。")]
         public string Title { get; set; }
 
         public string Content { get; set; }
