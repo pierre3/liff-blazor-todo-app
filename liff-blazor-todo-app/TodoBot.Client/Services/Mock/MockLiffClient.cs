@@ -4,7 +4,7 @@ using Microsoft.JSInterop;
 using System;
 using System.Threading.Tasks;
 
-namespace TodoBot.Client
+namespace TodoBot.Client.Srvices
 {
     public class MockLiffClient : ILiffClient
     {
@@ -23,7 +23,8 @@ namespace TodoBot.Client
 
         public Task<string> GetAccessTokenAsync()
         {
-            throw new NotImplementedException();
+            AccessToken = "dummy-access-token";
+            return Task.FromResult(AccessToken);
         }
 
         public Task InitializeAsync(IJSRuntime jSRuntime)

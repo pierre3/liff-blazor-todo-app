@@ -1,7 +1,7 @@
 ﻿@page "/create"
 @inject ILiffClient Liff
 @inject IJSRuntime JSRuntime
-@inject HttpClient HttpClient
+@inject ITodoBotClient TodoBotClient
 
 
 <TodoEditor Todo="new Todo() { DueDate = DateTime.Now}"
@@ -18,7 +18,7 @@
         try
         {
             todo.UserId = Liff.Data.Context.UserId;
-            await HttpClient.CreateTodoAsync(Liff.AccessToken, todo);
+            await TodoBotClient.CreateTodoAsync(Liff.AccessToken, todo);
         }
         catch (Exception e)
         {

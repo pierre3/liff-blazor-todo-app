@@ -1,7 +1,7 @@
 ﻿@page "/"
 @inject ILiffClient Liff
 @inject IJSRuntime JSRuntime
-@inject HttpClient HttpClient
+@inject ITodoBotClient TodoBotClient
 @inject IUriHelper UriHelper
 
 <header class="navbar navbar-light sticky-top mb-2" style="background-color: #e3f2fd;">
@@ -102,12 +102,12 @@ else
         ErrorMessage = null;
         try
         {
-            if(!Liff.Initialized)
+            if (!Liff.Initialized)
             {
                 await Liff.InitializeAsync(JSRuntime);
                 await Liff.GetAccessTokenAsync();
-           }
-           await ListTodoAsync();
+            }
+            await ListTodoAsync();
         }
         catch (Exception e)
         {
@@ -118,23 +118,23 @@ else
     private async Task ListTodoAsync()
     {
         ErrorMessage = null;
-        SourceTodoList=null;
+        SourceTodoList = null;
         try
         {
-            if(string.IsNullOrEmpty(Liff.AccessToken))
+            if (string.IsNullOrEmpty(Liff.AccessToken))
             {
                 ErrorMessage = "Could not get the accessToken.";
                 return;
             }
-            if(string.IsNullOrEmpty(Liff?.Data?.Context?.UserId))
+            if (string.IsNullOrEmpty(Liff?.Data?.Context?.UserId))
             {
                 ErrorMessage = "Liff.Data has not been initialized.";
                 return;
             }
-        
-            SourceTodoList = await HttpClient.GetTodoListAsync(Liff.AccessToken, Liff.Data.Context.UserId);
+
+            SourceTodoList = await TodoBotClient.GetTodoListAsync(Liff.AccessToken, Liff.Data.Context.UserId);
             FilterTodoList(Filter);
-            
+
         }
         catch (Exception e)
         {
@@ -146,7 +146,7 @@ else
     {
         Filter = filterType;
 
-        if(SourceTodoList == null){ return; }
+        if (SourceTodoList == null) { return; }
         switch (Filter)
         {
             case FilterType.NotCompleted:
@@ -172,7 +172,7 @@ else
         try
         {
             todo.Status = status;
-            await HttpClient.UpdateTodoAsync(Liff.AccessToken, todo.Id, todo);
+            await TodoBotClient.UpdateTodoAsync(Liff.AccessToken, todo.Id, todo);
             await ListTodoAsync();
         }
         catch (Exception e)
@@ -186,7 +186,7 @@ else
         ErrorMessage = null;
         try
         {
-            await HttpClient.DeleteTodoAsync(Liff.AccessToken, Liff.Data.Context.UserId, id);
+            await TodoBotClient.DeleteTodoAsync(Liff.AccessToken, Liff.Data.Context.UserId, id);
             await ListTodoAsync();
         }
         catch (Exception e)
