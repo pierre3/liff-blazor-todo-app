@@ -4,7 +4,7 @@ using TodoBot.Shared;
 
 namespace TodoBot.Client.Srvices
 {
-    public interface ITodoBotClient
+    public interface ITodoClient
     {
         Task CreateTodoAsync(string accessToken, Todo todo);
         Task DeleteTodoAsync(string accessToken, string userId, string id);

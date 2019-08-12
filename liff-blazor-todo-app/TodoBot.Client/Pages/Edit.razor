@@ -1,7 +1,7 @@
 ﻿@page "/edit/{Id}"
 @inject ILiffClient Liff
 @inject IJSRuntime JSRuntime
-@inject ITodoBotClient TodoBotClient
+@inject ITodoClient TodoClient
 
 @if (Todo == null)
 {
@@ -27,7 +27,7 @@ else
     {
         try
         {
-            Todo = await TodoBotClient.GetTodoAsync(Liff.AccessToken, Liff.Data.Context.UserId, Id);
+            Todo = await TodoClient.GetTodoAsync(Liff.AccessToken, Liff.Data.Context.UserId, Id);
         }
         catch (Exception e)
         {
@@ -38,6 +38,6 @@ else
     async Task UpdateTodoAsync(Todo todo)
     {
         todo.UserId = Liff.Data.Context.UserId;
-        await TodoBotClient.UpdateTodoAsync(Liff.AccessToken, Id, todo);
+        await TodoClient.UpdateTodoAsync(Liff.AccessToken, Id, todo);
     }
 }

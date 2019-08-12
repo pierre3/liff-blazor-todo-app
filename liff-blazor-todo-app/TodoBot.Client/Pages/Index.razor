@@ -1,7 +1,7 @@
 ﻿@page "/"
 @inject ILiffClient Liff
 @inject IJSRuntime JSRuntime
-@inject ITodoBotClient TodoBotClient
+@inject ITodoClient TodoClient
 @inject IUriHelper UriHelper
 
 <header class="navbar navbar-light sticky-top mb-2" style="background-color: #e3f2fd;">
@@ -132,7 +132,7 @@ else
                 return;
             }
 
-            SourceTodoList = await TodoBotClient.GetTodoListAsync(Liff.AccessToken, Liff.Data.Context.UserId);
+            SourceTodoList = await TodoClient.GetTodoListAsync(Liff.AccessToken, Liff.Data.Context.UserId);
             FilterTodoList(Filter);
 
         }
@@ -172,7 +172,7 @@ else
         try
         {
             todo.Status = status;
-            await TodoBotClient.UpdateTodoAsync(Liff.AccessToken, todo.Id, todo);
+            await TodoClient.UpdateTodoAsync(Liff.AccessToken, todo.Id, todo);
             await ListTodoAsync();
         }
         catch (Exception e)
@@ -186,7 +186,7 @@ else
         ErrorMessage = null;
         try
         {
-            await TodoBotClient.DeleteTodoAsync(Liff.AccessToken, Liff.Data.Context.UserId, id);
+            await TodoClient.DeleteTodoAsync(Liff.AccessToken, Liff.Data.Context.UserId, id);
             await ListTodoAsync();
         }
         catch (Exception e)

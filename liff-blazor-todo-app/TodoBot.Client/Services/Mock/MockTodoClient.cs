@@ -9,7 +9,7 @@ using TodoBot.Shared;
 
 namespace TodoBot.Client.Srvices
 {
-    public class MockTodoBotClient : ITodoBotClient
+    public class MockTodoClient : ITodoClient
     {
         private IList<Todo> todoList = new List<Todo>
         {

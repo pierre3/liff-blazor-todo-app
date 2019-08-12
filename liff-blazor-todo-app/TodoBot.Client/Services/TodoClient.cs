@@ -7,12 +7,12 @@ using TodoBot.Shared;
 
 namespace TodoBot.Client.Srvices
 {
-    public class TodoBotClient : ITodoBotClient
+    public class TodoClient : ITodoClient
     {
         private string baseUrl;
         private HttpClient httpClient;
        
-        public TodoBotClient(HttpClient httpClient, string baseUrl)
+        public TodoClient(HttpClient httpClient, string baseUrl)
         {
             this.baseUrl = baseUrl;
             this.httpClient = httpClient;

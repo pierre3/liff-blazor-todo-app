@@ -15,7 +15,7 @@ namespace TodoBot.Client
             //    new TodoBotClient(provider.GetService<HttpClient>(), "https://mytaskbot.azurewebsites.net"));
 
             services.AddSingleton<ILiffClient, MockLiffClient>();
-            services.AddSingleton<ITodoBotClient, MockTodoBotClient>();
+            services.AddSingleton<ITodoClient, MockTodoClient>();
         }
 
         public void Configure(IComponentsApplicationBuilder app)
