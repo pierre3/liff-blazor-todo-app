@@ -131,7 +131,7 @@ else
                 ErrorMessage = "Liff.Data has not been initialized.";
                 return;
             }
-
+            
             SourceTodoList = await TodoClient.GetTodoListAsync(Liff.AccessToken, Liff.Data.Context.UserId);
             FilterTodoList(Filter);
 
