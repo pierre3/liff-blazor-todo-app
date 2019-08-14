@@ -8,7 +8,7 @@ namespace TodoBot.Client
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<ILiffClient, MockLiffClient>();
+            services.AddSingleton<ILiffClient, LiffClient>();
         }
 
         public void Configure(IComponentsApplicationBuilder app)
