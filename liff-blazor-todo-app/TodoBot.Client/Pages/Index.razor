@@ -7,19 +7,19 @@
 <header class="navbar navbar-light sticky-top mb-2" style="background-color: #e3f2fd;">
     <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
         <div class="btn-group btn-group-toggle" data-toggle="buttons">
-            <button class="btn btn-info @(Filter == FilterType.NotCompleted? "active" : "")"
+            <button class="btn btn-info @(Filter == FilterType.NotCompleted? "active" : string.Empty)"
                     @onclick="()=>FilterTodoList(FilterType.NotCompleted)">
                 <span class="text-sm-center">未完</span>
             </button>
-            <button class="btn btn-info @(Filter == FilterType.Ready? "active" : "")"
+            <button class="btn btn-info @(Filter == FilterType.Ready? "active" : string.Empty)"
                     @onclick="()=>FilterTodoList(FilterType.Ready)">
                 <span class="text-sm-center">New!</span>
             </button>
-            <button class="btn btn-info @(Filter == FilterType.Doing? "active" : "")"
+            <button class="btn btn-info @(Filter == FilterType.Doing? "active" : string.Empty)"
                     @onclick="()=>FilterTodoList(FilterType.Doing)">
                 <span class="text-sm-center">実施中</span>
             </button>
-            <button class="btn btn-info @(Filter == FilterType.Completed? "active" : "")"
+            <button class="btn btn-info @(Filter == FilterType.Completed? "active" : string.Empty)"
                     @onclick="()=>FilterTodoList(FilterType.Completed)">
                 <span class="text-sm-center">完了</span>
             </button>
@@ -97,7 +97,7 @@ else
 
     string ErrorMessage;
 
-    protected override async Task OnInitAsync()
+    protected override async Task OnInitializedAsync()
     {
         ErrorMessage = null;
         try

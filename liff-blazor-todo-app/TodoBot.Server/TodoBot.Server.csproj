@@ -6,7 +6,6 @@
     <AssemblyName>TodoBot.Server</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="LineDC.Liff" Version="0.5.0.2" />
     <PackageReference Include="Microsoft.Azure.DocumentDB.Core" Version="2.5.1" />
     <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.0.0" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.CosmosDB" Version="3.0.3" />

@@ -10,10 +10,10 @@
 
 @code{
     [Parameter]
-    string Message { get; set; }
+    public string Message { get; set; }
 
     [Parameter]
-    string AlertType { get; set; } = "danger";
+    public string AlertType { get; set; } = "danger";
     private void CloseButtonClick()
     {
         Message = null;

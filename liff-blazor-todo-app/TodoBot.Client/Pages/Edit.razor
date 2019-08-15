@@ -17,13 +17,13 @@ else
 
 @code{
     [Parameter]
-    string Id { get; set; }
+    public string Id { get; set; }
 
     Todo Todo { get; set; }
 
     string ErrorMessage;
 
-    protected override async Task OnInitAsync()
+    protected override async Task OnInitializedAsync()
     {
         try
         {

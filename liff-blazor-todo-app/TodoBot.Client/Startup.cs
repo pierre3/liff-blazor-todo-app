@@ -15,7 +15,7 @@ namespace TodoBot.Client
 
             //services.AddSingleton<ILiffClient, LiffClient>();
             //services.AddSingleton<ITodoClient, TodoClient>(provider =>
-            //    new TodoBotClient(provider.GetService<HttpClient>(), "https://myTodo.azurewebsites.net"));
+            //    new TodoClient(provider.GetService<HttpClient>(), "https://myTodo.azurewebsites.net"));
         }
 
         public void Configure(IComponentsApplicationBuilder app)

@@ -35,13 +35,13 @@
 
 @code{
     [Parameter]
-    Todo Todo { get; set; }
+    public Todo Todo { get; set; }
 
     [Parameter]
-    string ButtonName { get; set; }
+    public string ButtonName { get; set; }
 
     [Parameter]
-    Func<Todo, Task> ButtonClickAsync { get; set; }
+    public Func<Todo, Task> ButtonClickAsync { get; set; }
 
     string ErrorMessage;
 
