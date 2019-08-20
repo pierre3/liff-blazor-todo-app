@@ -4,9 +4,9 @@
 @inject ITodoClient TodoClient
 
 
-<TodoEditor Todo="new Todo() { DueDate = DateTime.Now}"
+<TodoForm Todo="new Todo() { DueDate = DateTime.Now}"
             ButtonName="作成"
-            ButtonClickAsync="CreateTodoAsync"></TodoEditor>
+            ButtonClickAsync="CreateTodoAsync"></TodoForm>
 
 <Alert Message="@ErrorMessage" AlertType="danger"></Alert>
 
