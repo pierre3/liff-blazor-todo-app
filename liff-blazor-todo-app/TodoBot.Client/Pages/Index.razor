@@ -2,7 +2,7 @@
 @inject ILiffClient Liff
 @inject IJSRuntime JSRuntime
 @inject ITodoClient TodoClient
-@inject IUriHelper UriHelper
+@inject NavigationManager Navigation
 
 <header class="navbar navbar-light sticky-top mb-2" style="background-color: #e3f2fd;">
     <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
@@ -198,11 +198,11 @@ else
     private void Edit(string id)
     {
 
-        UriHelper.NavigateTo($"{UriHelper.GetBaseUri()}edit/{id}");
+        Navigation.NavigateTo($"{Navigation.BaseUri}edit/{id}");
     }
 
     private void Create()
     {
-        UriHelper.NavigateTo($"{UriHelper.GetBaseUri()}create");
+        Navigation.NavigateTo($"{Navigation.BaseUri}create");
     }
 }

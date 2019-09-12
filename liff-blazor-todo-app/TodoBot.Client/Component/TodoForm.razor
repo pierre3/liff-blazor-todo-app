@@ -1,7 +1,7 @@
 ﻿@inject ILiffClient Liff
 @inject IJSRuntime JSRuntime
 @inject HttpClient httpClient
-@inject IUriHelper UriHelper
+@inject NavigationManager Navigation
 
 <EditForm style="max-width:24rem;" Model="Todo" OnValidSubmit="OnButtonClickAsync">
     <DataAnnotationsValidator />
@@ -51,7 +51,7 @@
         try
         {
             await ButtonClickAsync?.Invoke(Todo);
-            UriHelper.NavigateTo($"{UriHelper.GetBaseUri()}");
+            Navigation.NavigateTo($"{Navigation.BaseUri}");
         }
         catch (Exception e)
         {

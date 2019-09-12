@@ -10,12 +10,12 @@ namespace TodoBot.Client
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<ILiffClient, MockLiffClient>();
-            services.AddSingleton<ITodoClient, MockTodoClient>();
+            //services.AddSingleton<ILiffClient, MockLiffClient>();
+            //services.AddSingleton<ITodoClient, MockTodoClient>();
 
-            //services.AddSingleton<ILiffClient, LiffClient>();
-            //services.AddSingleton<ITodoClient, TodoClient>(provider =>
-            //    new TodoClient(provider.GetService<HttpClient>(), "https://myTodo.azurewebsites.net"));
+            services.AddSingleton<ILiffClient, LiffClient>();
+            services.AddSingleton<ITodoClient, TodoClient>(provider =>
+                new TodoClient(provider.GetService<HttpClient>(), "https://liff-todo.azurewebsites.net"));
         }
 
         public void Configure(IComponentsApplicationBuilder app)
