@@ -1,3 +1,30 @@
 ﻿@page "/"
+@inject ILiffClient Liff
+@inject IJSRuntime JSRuntime
 
 <h1>Hello LIFF APP!</h1>
+<Alert Message="@ErrorMessage" AlertType="danger"></Alert>
+
+@code{
+    protected string ErrorMessage{get;set;}
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            if (!Liff.Initialized)
+            {
+                await Liff.Init(JSRuntime);
+                if (!await Liff.IsLoggedIn())
+                {
+                    await Liff.Login();
+                    return;
+                }
+                Liff.Initialized = true;
+            }
+        }
+        catch (Exception e)
+        {
+            ErrorMessage = e.ToString();
+        }
+    }
+}
