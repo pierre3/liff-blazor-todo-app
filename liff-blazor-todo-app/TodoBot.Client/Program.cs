@@ -21,7 +21,7 @@ namespace TodoBot.Client
 #else
             builder.Services.AddSingleton<ITodoClient>(
                 provider => new TodoClient(provider.GetService<HttpClient>(), 
-                "https://liff-todo.azurewebsites.net"));
+                "https://liff-todo-func.azurewebsites.net"));
             var liffId = "1653926279-b1GD68mM";
 #endif
             builder.Services.AddSingleton<ILiffClient>(new LiffClient(liffId));

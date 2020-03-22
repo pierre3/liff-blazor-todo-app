@@ -91,9 +91,9 @@ namespace TodoBot.Server
             log.LogInformation($"{nameof(GetTodoList)} method prosessing...");
             if (!await lineTokenService.VerifyTokenAsync(req.Headers[ApiServer.AccessTokenHeaderName]))
             {
+                log.LogError($"{nameof(GetTodoList)} VerifyTokenAsync faild.");
                 return new ForbidResult();
             }
-
             try
             {
                 var todolist = await todoRepository.GetTodoListAsync(userId);
@@ -101,6 +101,7 @@ namespace TodoBot.Server
             }
             catch (JsonSerializationException e)
             {
+                log.LogError(e, $"{nameof(GetTodoList)} GetTodoListAsync faild.");
                 return new BadRequestObjectResult(e.Message);
             }
 
