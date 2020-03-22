@@ -1,72 +1,69 @@
 ﻿@page "/profile"
-@inject ILiffClient Liff
 @inject IJSRuntime JSRuntime
+@inject ILiffClient Liff
 
-@if (Liff.Data == null)
-{
-    <img src="image/loading.gif" alt="Loading...">
-}
-else
-{
-    <div class="card" style="width: 20rem;">
-        @if (Liff.Profile != null)
+<div class="card" style="width: 20rem;">
+    @if (LineProfile != null)
+    {
+        <img class="card-img" src="@LineProfile?.PictureUrl" alt="Loading image..." />
+        <div class="card-body">
+            <h5 class="card-title">@LineProfile?.DisplayName</h5>
+            <p class="card-text">@LineProfile?.StatusMessage</p>
+        </div>
+    }
+    <ul class="list-group">
+        <li class="list-group-item">LIFF Ver.: @Version</li>
+        <li class="list-group-item">OS: @OS</li>
+        <li class="list-group-item">Language: @Language</li>
+        <li class="list-group-item">TokenId: @TokenId</li>
+        <li class="list-group-item">Type: @Context?.Type</li>
+        <li class="list-group-item">ViewType: @Context?.ViewType</li>
+        <li class="list-group-item">UserId: @Context?.UserId</li>
+        @if (@Context?.Type == ContextType.Utou)
         {
-            <img class="card-img" src="@Liff.Profile?.PictureUrl" alt="Loading image..." />
-            <div class="card-body">
-                <h5 class="card-title">@Liff.Profile?.DisplayName</h5>
-                <p class="card-text">@Liff.Profile?.StatusMessage</p>
-            </div>
+            <li class="list-group-item">UtouId: @Context?.UtouId</li>
         }
-        else
+        else if (@Context?.Type == ContextType.Room)
         {
-            <div class="card-body">
-                <button class="btn btn-info" @onclick="LoadProfileAsync">プロファイル読み込み</button>
-            </div>
+            <li class="list-group-item">RoomId: @Context?.RoomId</li>
         }
-        <ul class="list-group">
-            <li class="list-group-item">Language: @Liff.Data?.Language</li>
-            <li class="list-group-item">Type: @Liff.Data?.Context.Type</li>
-            <li class="list-group-item">ViewType: @Liff.Data?.Context.ViewType</li>
-            <li class="list-group-item">UserId: @Liff.Data?.Context.UserId</li>
-            @if (@Liff.Data?.Context.Type == ContextType.Utou)
-            {
-                <li class="list-group-item">UtouId: @Liff.Data?.Context.UtouId</li>
-            }
-            else if (@Liff.Data?.Context.Type == ContextType.Room)
-            {
-                <li class="list-group-item">RoomId: @Liff.Data?.Context.RoomId</li>
-            }
-            else if (@Liff.Data?.Context.Type == ContextType.Group)
-            {
-                <li class="list-group-item">GroupId: @Liff.Data?.Context.GroupId</li>
-            }
-        </ul>
-    </div>
-}
+        else if (@Context?.Type == ContextType.Group)
+        {
+            <li class="list-group-item">GroupId: @Context?.GroupId</li>
+        }
+    </ul>
+</div>
 <Alert Message="@ErrorMessage" AlertType="danger"></Alert>
 
 @code{
-    string ErrorMessage;
+    LineDC.Liff.Data.Profile LineProfile { get; set; }
+    LiffContext Context { get; set; }
+    string TokenId { get; set; }
+    string OS { get; set; }
+    string Language { get; set; }
+    string Version { get; set; }
+    string ErrorMessage { get; set; }
+
 
     protected override async Task OnInitializedAsync()
     {
-        try
-        {
-            await Liff.InitializeAsync(JSRuntime);
-            await Liff.LoadProfileAsync();
-            StateHasChanged();
-        }
-        catch (Exception e)
-        {
-            ErrorMessage = e.ToString();
-        }
-    }
 
-    private async Task LoadProfileAsync()
-    {
         try
         {
-            await Liff.LoadProfileAsync();
+            if (!await Liff.InitializeAsync(JSRuntime))
+            {
+                return;
+            }
+            LineProfile = await Liff.GetProfile();
+            if (await Liff.IsInClient())
+            {
+                Context = await Liff.GetContext();
+            }
+            var idtoken = await Liff.GetDecodedIDToken();
+            TokenId = idtoken.Sub;
+            OS = await Liff.GetOS();
+            Language = await Liff.GetLanguage();
+            Version = await Liff.GetVersion();
             StateHasChanged();
         }
         catch (Exception e)
@@ -76,3 +73,4 @@ else
     }
 
 }
+

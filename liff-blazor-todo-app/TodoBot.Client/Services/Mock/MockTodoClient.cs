@@ -1,9 +1,6 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using TodoBot.Shared;
 
@@ -11,32 +8,11 @@ namespace TodoBot.Client.Srvices
 {
     public class MockTodoClient : ITodoClient
     {
-        private IList<Todo> todoList = new List<Todo>
-        {
-            new Todo()
-            {
-                Id = Guid.NewGuid().ToString(),
-                UserId = "U28aa279ed6xxxxxxxxxxxxxxxxxxxxxx",
-                Title ="ゴミ出し",
-                Content ="段ボール・紙類をまとめる",
-                Status = Status.Ready,
-                DueDate = DateTime.Now + TimeSpan.FromDays(1)
-            },
-            new Todo()
-            {
-                Id = Guid.NewGuid().ToString(),
-                UserId = "U28aa279ed6xxxxxxxxxxxxxxxxxxxxxx",
-                Title ="日用品の買い出し",
-                Content ="トイレットペーパー、洗濯洗剤、歯磨き粉",
-                Status = Status.Ready,
-                DueDate = DateTime.Now + TimeSpan.FromDays(1)
-            },
-        };
-        
+        private readonly IList<Todo> todoList = new List<Todo>();
 
         public Task<IList<Todo>> GetTodoListAsync(string accessToken, string userId)
         {
-            return Task.FromResult(todoList);
+            return Task.FromResult(todoList.Where(x=>x.UserId==userId).ToList() as IList<Todo>);
         }
 
         public Task<Todo> GetTodoAsync(string accessToken, string userId, string id)

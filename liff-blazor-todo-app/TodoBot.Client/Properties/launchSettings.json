@@ -3,8 +3,8 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:54494/liff-blazor-todo-app/",
-      "sslPort": 0
+      "applicationUrl": "https://localhost:44303/liff-blazor-todo-app/",
+      "sslPort": 44303
     }
   },
   "profiles": {

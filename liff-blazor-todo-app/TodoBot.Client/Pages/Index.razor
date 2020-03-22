@@ -1,6 +1,6 @@
 ﻿@page "/"
-@inject ILiffClient Liff
 @inject IJSRuntime JSRuntime
+@inject ILiffClient Liff
 @inject ITodoClient TodoClient
 @inject NavigationManager Navigation
 
@@ -91,21 +91,21 @@ else
         Doing,
         Completed
     }
-    FilterType Filter = FilterType.NotCompleted;
-    IList<Todo> TodoList;
-    IList<Todo> SourceTodoList;
+    FilterType Filter { get; set; } = FilterType.NotCompleted;
+    IList<Todo> TodoList { get; set; }
+    IList<Todo> SourceTodoList { get; set; }
 
-    string ErrorMessage;
-
+    string UserId { get; set; }
+    string AccessToken { get; set; }
+    string ErrorMessage { get; set; }
     protected override async Task OnInitializedAsync()
     {
         ErrorMessage = null;
         try
         {
-            if (!Liff.Initialized)
+            if (!await Liff.InitializeAsync(JSRuntime))
             {
-                await Liff.InitializeAsync(JSRuntime);
-                await Liff.GetAccessTokenAsync();
+                return;
             }
             await ListTodoAsync();
         }
@@ -121,18 +121,26 @@ else
         SourceTodoList = null;
         try
         {
-            if (string.IsNullOrEmpty(Liff.AccessToken))
+            if (string.IsNullOrEmpty(await Liff.GetAccessToken()))
             {
                 ErrorMessage = "Could not get the accessToken.";
                 return;
             }
-            if (string.IsNullOrEmpty(Liff?.Data?.Context?.UserId))
+
+
+            var idToken = await Liff.GetDecodedIDToken();
+            UserId = idToken?.Sub;
+            if (string.IsNullOrEmpty(UserId))
             {
-                ErrorMessage = "Liff.Data has not been initialized.";
+                ErrorMessage = "User ID ";
                 return;
             }
-            
-            SourceTodoList = await TodoClient.GetTodoListAsync(Liff.AccessToken, Liff.Data.Context.UserId);
+            AccessToken = await Liff.GetAccessToken();
+            if (string.IsNullOrEmpty(AccessToken))
+            {
+                ErrorMessage = "Access Token";
+            }
+            SourceTodoList = await TodoClient.GetTodoListAsync(AccessToken, UserId);
             FilterTodoList(Filter);
 
         }
@@ -172,7 +180,7 @@ else
         try
         {
             todo.Status = status;
-            await TodoClient.UpdateTodoAsync(Liff.AccessToken, todo.Id, todo);
+            await TodoClient.UpdateTodoAsync(AccessToken, todo.Id, todo);
             await ListTodoAsync();
         }
         catch (Exception e)
@@ -186,7 +194,7 @@ else
         ErrorMessage = null;
         try
         {
-            await TodoClient.DeleteTodoAsync(Liff.AccessToken, Liff.Data.Context.UserId, id);
+            await TodoClient.DeleteTodoAsync(AccessToken, UserId, id);
             await ListTodoAsync();
         }
         catch (Exception e)

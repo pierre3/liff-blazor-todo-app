@@ -1,16 +1,33 @@
-﻿using Microsoft.AspNetCore.Blazor.Hosting;
+﻿using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using LineDC.Liff;
+using Microsoft.Extensions.DependencyInjection;
+using System.Threading.Tasks;
+using TodoBot.Client.Srvices;
+using System.Linq;
+using System.Net.Http;
 
 namespace TodoBot.Client
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
-        }
+            var builder = WebAssemblyHostBuilder.CreateDefault(args);
+            builder.RootComponents.Add<App>("app");
+            builder.Services.AddBaseAddressHttpClient();
+#if DEBUG
+            builder.Services.AddSingleton<ITodoClient>(new MockTodoClient());
+            var liffId = "1653926279-Q76O2r4M";
+#else
+            builder.Services.AddSingleton<ITodoClient>(
+                provider => new TodoClient(provider.GetService<HttpClient>(), 
+                "https://liff-todo.azurewebsites.net"));
+            var liffId = "1653926279-b1GD68mM";
+#endif
+            builder.Services.AddSingleton<ILiffClient>(new LiffClient(liffId));
 
-        public static IWebAssemblyHostBuilder CreateHostBuilder(string[] args) =>
-            BlazorWebAssemblyHost.CreateDefaultBuilder()
-                .UseBlazorStartup<Startup>();
+            var host = builder.Build();
+            await host.RunAsync();
+        }
     }
 }
