@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
+using System.Web.Http;
 using TodoBot.Server.Services;
 using TodoBot.Shared;
 
@@ -51,7 +52,6 @@ namespace TodoBot.Server
             {
                 return new BadRequestObjectResult(e.Message);
             }
-
         }
 
         [FunctionName("UpdateTodo")]
@@ -91,9 +91,9 @@ namespace TodoBot.Server
             log.LogInformation($"{nameof(GetTodoList)} method prosessing...");
             if (!await lineTokenService.VerifyTokenAsync(req.Headers[ApiServer.AccessTokenHeaderName]))
             {
-                log.LogError($"{nameof(GetTodoList)} VerifyTokenAsync faild.");
                 return new ForbidResult();
             }
+            
             try
             {
                 var todolist = await todoRepository.GetTodoListAsync(userId);
@@ -101,8 +101,12 @@ namespace TodoBot.Server
             }
             catch (JsonSerializationException e)
             {
-                log.LogError(e, $"{nameof(GetTodoList)} GetTodoListAsync faild.");
                 return new BadRequestObjectResult(e.Message);
+            }
+            catch (Exception e)
+            {
+                log.LogError(e, $"{nameof(GetTodoList)} GetTodoListAsync faild");
+                return new InternalServerErrorResult();
             }
 
         }
@@ -114,7 +118,7 @@ namespace TodoBot.Server
             string id,
             ILogger log)
         {
-            log.LogInformation($"{nameof(GetTodoList)} method prosessing...");
+            log.LogInformation($"{nameof(GetTodo)} method prosessing...");
             if (!await lineTokenService.VerifyTokenAsync(req.Headers[ApiServer.AccessTokenHeaderName]))
             {
                 return new ForbidResult();
@@ -129,17 +133,21 @@ namespace TodoBot.Server
             {
                 return new BadRequestObjectResult(e.Message);
             }
-
+            catch (Exception e)
+            {
+                log.LogError(e, $"{nameof(GetTodo)} GetTodoAsync faild");
+                return new InternalServerErrorResult();
+            }
         }
 
         [FunctionName("DeleteTodo")]
-        public async Task<IActionResult> DeleteTodoAsync(
+        public async Task<IActionResult> DeleteTodo(
             [HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "{userId}/todoList/{id}")] HttpRequest req,
             string userId,
             string id,
             ILogger log)
         {
-            log.LogInformation($"{nameof(DeleteTodoAsync)} method prosessing...");
+            log.LogInformation($"{nameof(DeleteTodo)} method prosessing...");
             if (!await lineTokenService.VerifyTokenAsync(req.Headers[ApiServer.AccessTokenHeaderName]))
             {
                 return new ForbidResult();
@@ -154,8 +162,11 @@ namespace TodoBot.Server
             {
                 return new BadRequestObjectResult(e.Message);
             }
-
+            catch (Exception e)
+            {
+                log.LogError(e, $"{nameof(DeleteTodo)} DeleteTodoAsync faild");
+                return new InternalServerErrorResult();
+            }
         }
     }
-
 }

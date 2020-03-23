@@ -17,12 +17,12 @@ namespace TodoBot.Client
             builder.Services.AddBaseAddressHttpClient();
 #if DEBUG
             builder.Services.AddSingleton<ITodoClient>(new MockTodoClient());
-            var liffId = "1653926279-Q76O2r4M";
+            var liffId = "Liff-ID-For-Debug";
 #else
             builder.Services.AddSingleton<ITodoClient>(
                 provider => new TodoClient(provider.GetService<HttpClient>(), 
-                "https://liff-todo-func.azurewebsites.net"));
-            var liffId = "1653926279-b1GD68mM";
+                "https://your-azure-func.azurewebsites.net"));
+            var liffId = "Liff-ID";
 #endif
             builder.Services.AddSingleton<ILiffClient>(new LiffClient(liffId));
 
