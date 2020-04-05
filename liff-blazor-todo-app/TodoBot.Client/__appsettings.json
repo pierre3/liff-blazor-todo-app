@@ -1,0 +1,14 @@
+{
+    "AppSettings": {
+        "LiffId": "",
+        "LiffIdForDebug": "",
+        "FunctionSettings": {
+            "BaseUrl": "",
+            "CreateTodoKey": "",
+            "UpdateTodoKey": "",
+            "GetTodoListKey": "",
+            "GetTodoKey": "",
+            "DeleteTodoKey": ""
+        }
+    }
+}

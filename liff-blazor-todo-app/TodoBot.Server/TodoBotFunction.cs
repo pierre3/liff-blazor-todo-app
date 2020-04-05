@@ -25,7 +25,7 @@ namespace TodoBot.Server
 
         [FunctionName("CreateTodo")]
         public async Task<IActionResult> CreateTodo(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "todoList")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Function, "post", Route = "todoList")] HttpRequest req,
             ILogger log)
         {
             log.LogInformation($"{nameof(CreateTodo)} method prosessing...");
@@ -56,7 +56,7 @@ namespace TodoBot.Server
 
         [FunctionName("UpdateTodo")]
         public async Task<IActionResult> UpdateTodo(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "todoList/{id}")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Function, "put", Route = "todoList/{id}")] HttpRequest req,
             string id,
             ILogger log)
         {
@@ -84,7 +84,7 @@ namespace TodoBot.Server
 
         [FunctionName("GetTodoList")]
         public async Task<IActionResult> GetTodoList(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "{userId}/todoList")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "{userId}/todoList")] HttpRequest req,
             string userId,
             ILogger log)
         {
@@ -113,7 +113,7 @@ namespace TodoBot.Server
 
         [FunctionName("GetTodo")]
         public async Task<IActionResult> GetTodo(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "{userId}/todoList/{id}")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "{userId}/todoList/{id}")] HttpRequest req,
             string userId,
             string id,
             ILogger log)
@@ -142,7 +142,7 @@ namespace TodoBot.Server
 
         [FunctionName("DeleteTodo")]
         public async Task<IActionResult> DeleteTodo(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "{userId}/todoList/{id}")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Function, "delete", Route = "{userId}/todoList/{id}")] HttpRequest req,
             string userId,
             string id,
             ILogger log)

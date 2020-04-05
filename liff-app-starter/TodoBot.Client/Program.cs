@@ -1,6 +1,9 @@
 ﻿using LineDC.Liff;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.IO;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace TodoBot.Client
@@ -9,7 +12,12 @@ namespace TodoBot.Client
     {
         public static async Task Main(string[] args)
         {
-            var liffId = "1653926279-XQyJ2VAZ";
+            var stream = Assembly.GetExecutingAssembly()
+                .GetManifestResourceStream("TodoBot.Client.appsettings.json");
+            var config = new ConfigurationBuilder()
+                .AddJsonStream(stream)
+                .Build();
+            var liffId = config.GetValue<string>("LiffId");
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("app");
             builder.Services.AddBaseAddressHttpClient();

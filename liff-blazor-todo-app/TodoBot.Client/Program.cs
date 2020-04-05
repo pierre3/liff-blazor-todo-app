@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using TodoBot.Client.Srvices;
 using System.Linq;
 using System.Net.Http;
+using System.Reflection;
+using Microsoft.Extensions.Configuration;
 
 namespace TodoBot.Client
 {
@@ -12,22 +14,38 @@ namespace TodoBot.Client
     {
         public static async Task Main(string[] args)
         {
+            var appSettings = GetAppSettings();
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("app");
             builder.Services.AddBaseAddressHttpClient();
-#if DEBUG
-            builder.Services.AddSingleton<ITodoClient>(new MockTodoClient());
-            var liffId = "Liff-ID-For-Debug";
-#else
-            builder.Services.AddSingleton<ITodoClient>(
-                provider => new TodoClient(provider.GetService<HttpClient>(), 
-                "https://your-azure-func.azurewebsites.net"));
-            var liffId = "Liff-ID";
-#endif
-            builder.Services.AddSingleton<ILiffClient>(new LiffClient(liffId));
 
-            var host = builder.Build();
-            await host.RunAsync();
+            AddTodoBotService(builder.Services, appSettings);
+
+            await builder.Build().RunAsync();
+        }
+
+        private static void AddTodoBotService(IServiceCollection services, AppSettings appSettings)
+        {
+#if DEBUG
+            services.AddSingleton<ITodoClient>(new MockTodoClient());
+            services.AddSingleton<ILiffClient>(new LiffClient(appSettings.LiffIdForDebug));
+#else
+            services.AddSingleton<ITodoClient>(
+                            provider => new TodoClient(
+                                provider.GetService<HttpClient>(),
+                                appSettings.FunctionSettings));
+            services.AddSingleton<ILiffClient>(new LiffClient(appSettings.LiffId));
+#endif
+        }
+
+        private static AppSettings GetAppSettings()
+        {
+            var stream = Assembly.GetExecutingAssembly()
+                .GetManifestResourceStream("TodoBot.Client.appsettings.json");
+            var config = new ConfigurationBuilder()
+                .AddJsonStream(stream)
+                .Build();
+            return config.GetSection("AppSettings").Get<AppSettings>();
         }
     }
 }
