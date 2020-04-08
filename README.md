@@ -18,6 +18,7 @@ LINE Front-end Framework (LIFF) v2 を利用したTodo管理アプリケーシ�
 
 Demoサイト
 https://pierre3.github.io/liff-blazor-todo-app/  
+※リンクからLINEのログイン画面に遷移します。
 ※Demoサイトでは作成したToDoはメモリ上にのみ作成され、永続化は行いません。
 
 ## /liff-app-stater 
