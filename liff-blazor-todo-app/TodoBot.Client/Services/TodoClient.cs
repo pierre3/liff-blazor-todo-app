@@ -9,12 +9,12 @@ namespace TodoBot.Client.Srvices
 {
     public class TodoClient : ITodoClient
     {
-        private readonly FunctionSettings settings;
+        private readonly string requestUrl;
         private readonly HttpClient httpClient;
        
-        public TodoClient(HttpClient httpClient, FunctionSettings settings)
+        public TodoClient(HttpClient httpClient, string requestUrl)
         {
-            this.settings = settings;
+            this.requestUrl = requestUrl;
             this.httpClient = httpClient;
         }
 
@@ -23,7 +23,7 @@ namespace TodoBot.Client.Srvices
             var response = await SendAsync(
                 accessToken,
                 HttpMethod.Get,
-                $"{settings.BaseUrl}/api/{userId}/todoList?code={settings.GetTodoListKey}");
+                $"{requestUrl}/api/{userId}/todoList");
             var body = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<IList<Todo>>(body) ?? new List<Todo>();
         }
@@ -33,7 +33,7 @@ namespace TodoBot.Client.Srvices
             var response = await SendAsync(
                 accessToken,
                 HttpMethod.Get,
-                $"{settings.BaseUrl}/api/{userId}/todoList/{id}?code={settings.GetTodoKey}");
+                $"{requestUrl}/api/{userId}/todoList/{id}");
             var body = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<Todo>(body);
         }
@@ -45,7 +45,7 @@ namespace TodoBot.Client.Srvices
             await SendAsync(
                 accessToken,
                 HttpMethod.Put,
-                $"{settings.BaseUrl}/api/todoList/{id}?code={settings.UpdateTodoKey}",
+                $"{requestUrl}/api/todoList/{id}",
                 content);
         }
 
@@ -56,7 +56,7 @@ namespace TodoBot.Client.Srvices
             await SendAsync(
                 accessToken,
                 HttpMethod.Post,
-                $"{settings.BaseUrl}/api/todoList?code={settings.CreateTodoKey}",
+                $"{requestUrl}/api/todoList",
                 content);
         }
 
@@ -65,7 +65,7 @@ namespace TodoBot.Client.Srvices
             await SendAsync(
                 accessToken,
                 HttpMethod.Delete,
-                $"{settings.BaseUrl}/api/{userId}/todoList/{id}?code={settings.DeleteTodoKey}");
+                $"{requestUrl}/api/{userId}/todoList/{id}");
         }
 
 

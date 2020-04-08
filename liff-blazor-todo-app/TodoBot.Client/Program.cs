@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using Microsoft.Extensions.Configuration;
+using System;
 
 namespace TodoBot.Client
 {
@@ -14,38 +15,35 @@ namespace TodoBot.Client
     {
         public static async Task Main(string[] args)
         {
-            var appSettings = GetAppSettings();
+            Console.WriteLine(args.Length);
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("app");
             builder.Services.AddBaseAddressHttpClient();
-
-            AddTodoBotService(builder.Services, appSettings);
+            AddTodoBotService(builder.Services);
 
             await builder.Build().RunAsync();
         }
 
-        private static void AddTodoBotService(IServiceCollection services, AppSettings appSettings)
+        private static void AddTodoBotService(IServiceCollection services)
         {
-#if DEBUG
-            services.AddSingleton<ITodoClient>(new MockTodoClient());
-            services.AddSingleton<ILiffClient>(new LiffClient(appSettings.LiffIdForDebug));
-#else
-            services.AddSingleton<ITodoClient>(
-                            provider => new TodoClient(
-                                provider.GetService<HttpClient>(),
-                                appSettings.FunctionSettings));
-            services.AddSingleton<ILiffClient>(new LiffClient(appSettings.LiffId));
-#endif
-        }
+            services.AddSingleton<ITodoClient>(provider =>
+            {
+                var appSettings = provider.GetRequiredService<IConfiguration>().Get<AppSettings>();
+                var httpClient = provider.GetRequiredService<HttpClient>();
+                if (string.IsNullOrEmpty(appSettings?.FunctionUrl))
+                {
+                    return new MockTodoClient();
+                }
+                return new TodoClient(
+                    httpClient,
+                    appSettings.FunctionUrl);
+            });
+            services.AddSingleton<ILiffClient>(provider =>
+            {
+                var appSettings = provider.GetRequiredService<IConfiguration>().Get<AppSettings>();
+                return new LiffClient(appSettings.LiffId);
+            });
 
-        private static AppSettings GetAppSettings()
-        {
-            var stream = Assembly.GetExecutingAssembly()
-                .GetManifestResourceStream("TodoBot.Client.appsettings.json");
-            var config = new ConfigurationBuilder()
-                .AddJsonStream(stream)
-                .Build();
-            return config.GetSection("AppSettings").Get<AppSettings>();
         }
     }
 }

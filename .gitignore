@@ -339,4 +339,4 @@ ASALocalRun/
 # BeatPulse healthcheck temp database
 healthchecksdb
 
-/liff-blazor-todo-app/TodoBot.Client/appsettings.json
+/liff-blazor-todo-app/TodoBot.Client/wwwroot/appsettings.development.json

@@ -5,10 +5,11 @@ using System.Threading.Tasks;
 
 namespace TodoBot.Client
 {
-    public class AppSettings
+    public class TodoBotSettings
     {
         public string LiffId { get; set; }
         public string FunctionUrl { get; set; }
+        public string FunctionKey { get; set; }
     }
 
 }
