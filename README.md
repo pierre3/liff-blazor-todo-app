@@ -14,7 +14,11 @@ LINE Front-end Framework (LIFF) v2 を利用したTodo管理アプリケーシ�
 ```
 
 ## /docs
-ビルドしたアプリを配置するフォルダ。ここをGitHubページとして公開します。
+ビルドしたアプリを配置するフォルダ。ここに配置したアプリが以下のページに公開されます。
+
+Demoサイト
+https://pierre3.github.io/liff-blazor-todo-app/  
+※Demoサイトでは作成したToDoはメモリ上にのみ作成され、永続化は行いません。
 
 ## /liff-app-stater 
 Blazor(client-side)のみで構成された最小限のサンプルコードです。
