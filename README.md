@@ -23,3 +23,6 @@ https://pierre3.github.io/liff-blazor-todo-app/
 
 ## /lif-blazor-todo-app
 Todo管理アプリのサンプルコードです。
+
+## /liff-app-starter
+クライアント(Blazor WebAssembly App) + LIFF のみの最小構成のサンプル
