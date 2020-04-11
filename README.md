@@ -13,16 +13,13 @@ LINE Front-end Framework (LIFF) v2 を利用したTodo管理アプリケーシ�
 　dotnet new -i Microsoft.AspNetCore.Components.WebAssembly.Templates::3.2.0-preview3.20168.3
 ```
 
-## /docs
-ビルドしたアプリを配置するフォルダ。ここに配置したアプリが以下のページに公開されます。
+## /.github/workflow
+GitHub Actions による自動デプロイの設定
 
 Demoサイト
 https://pierre3.github.io/liff-blazor-todo-app/  
 ※リンクからLINEのログイン画面に遷移します。
 ※Demoサイトでは作成したToDoはメモリ上にのみ作成され、永続化は行いません。
-
-## /liff-app-stater 
-Blazor(client-side)のみで構成された最小限のサンプルコードです。
 
 ## /lif-blazor-todo-app
 Todo管理アプリのサンプルコードです。
